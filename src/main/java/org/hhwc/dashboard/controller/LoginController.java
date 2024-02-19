@@ -1,0 +1,92 @@
+package org.hhwc.dashboard.controller;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.hhwc.dashboard.entity.Admin;
+import org.hhwc.dashboard.entity.Instructor;
+import org.hhwc.dashboard.mapper.AdminMapper;
+import org.hhwc.dashboard.mapper.InstructorMapper;
+import org.hhwc.dashboard.util.EntityUtil;
+import org.hhwc.dashboard.util.Response;
+import org.hhwc.dashboard.util.ResponseUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
+import java.util.Objects;
+
+@RestController
+public class LoginController {
+
+    @Autowired
+    private AdminMapper adminMapper;
+
+    @Autowired
+    private InstructorMapper instructorMapper;
+
+    @Autowired
+    private HttpServletRequest request;
+
+    @Autowired
+    private HttpServletResponse response;
+
+    @Value("${dashboard.cookie.max-life}")
+    private Integer cookieMaxLife;
+
+    @PostMapping("/login/admin")
+    public Response<String> login(Admin admin,
+                                  @CookieValue(value = "Dashboard_Admin_UN", defaultValue = "") String cookieName) {
+        return ResponseUtil.gather(() -> {
+            if (!cookieName.isEmpty()) {
+                return cookieName;
+            }
+
+            Admin thisAdmin = adminMapper.selectById(admin.getUsername());
+            if (thisAdmin == null || !thisAdmin.getPassword().equals(admin.getPassword())) {
+                throw new RuntimeException("Invalid Credential");
+            }
+
+            Cookie cookie = new Cookie("Dashboard_Admin_UN", thisAdmin.getUsername());
+            cookie.setMaxAge(cookieMaxLife);
+            response.addCookie(cookie);
+
+            return thisAdmin.getUsername();
+        });
+    }
+
+    @PostMapping("/login/instructor")
+    public Response<Instructor> login(Instructor instructor,
+                                      @CookieValue(value = "Dashboard_Instructor", defaultValue = "") String cookieName) {
+        return ResponseUtil.gather(() -> {
+            Instructor thisInstructor;
+
+            if (EntityUtil.allNull(instructor) && !cookieName.isEmpty()) {
+                System.out.println("all null");
+                thisInstructor = instructorMapper.selectInstructorAndCoursesById(cookieName);
+            } else {
+                thisInstructor = instructorMapper.selectInstructorAndCoursesById(instructor.getUuid());
+            }
+
+//            if (!cookieName.isEmpty()) {
+//                thisInstructor = instructorMapper.selectById(cookieName);
+//            } else {
+//                thisInstructor = instructorMapper.selectById(instructor.getUuid());
+//            }
+
+            if (thisInstructor == null || (Objects.nonNull(instructor.getPassword()) &&
+                    !thisInstructor.getPassword().equals(instructor.getPassword()))) {
+                throw new RuntimeException("Invalid Credential");
+            }
+
+            Cookie cookie = new Cookie("Dashboard_Instructor", thisInstructor.getUuid());
+            cookie.setMaxAge(cookieMaxLife);
+            response.addCookie(cookie);
+
+            return thisInstructor;
+        });
+    }
+}

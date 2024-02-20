@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hhwc.dashboard.interceptor.annotations.EnsureAdmin;
+import org.hhwc.dashboard.interceptor.annotations.EnsureLogin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
@@ -16,7 +17,12 @@ public class AdminInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.info("Entering AdminInterceptor...");
 
-        EnsureAdmin ensureAdmin = ((HandlerMethod) handler).getMethodAnnotation(EnsureAdmin.class);
+        EnsureLogin ensureAdmin;
+        try {
+            ensureAdmin = ((HandlerMethod) handler).getMethodAnnotation(EnsureLogin.class);
+        } catch (Exception e) {
+            return true;
+        }
         if (ensureAdmin == null) {
             // no annotation exists, pass
             logger.info("Admin not required, pass...");

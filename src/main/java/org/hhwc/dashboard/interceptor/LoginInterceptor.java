@@ -18,7 +18,13 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.info("Entering LoginInterceptor...");
 
-        EnsureLogin ensureLogin = ((HandlerMethod) handler).getMethodAnnotation(EnsureLogin.class);
+        EnsureLogin ensureLogin;
+        try {
+            ensureLogin = ((HandlerMethod) handler).getMethodAnnotation(EnsureLogin.class);
+        } catch (Exception e) {
+            return true;
+        }
+
         if (ensureLogin == null) {
             logger.info("Login not required, pass...");
             return true;

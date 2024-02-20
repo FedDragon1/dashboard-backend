@@ -82,3 +82,38 @@ INSERT INTO admin values ('admin', 'root');
 DELETE FROM admin;
 DROP TABLE admin;
 
+-- Attendance Assignments
+
+CREATE TABLE attendance(
+                           uuid VARCHAR(32) PRIMARY KEY,
+                           date DATE NOT NULL,
+                           course_uuid VARCHAR(32) NOT NULL
+);
+
+INSERT INTO attendance values ('1', '2024-02-19', '1');
+INSERT INTO attendance values ('2', '2024-02-20', '1');
+INSERT INTO attendance values ('3', '2024-02-21', '1');
+INSERT INTO attendance values ('4', '2024-02-21', '2');
+INSERT INTO attendance values ('5', '2024-02-21', '3');
+INSERT INTO attendance values ('6', '2024-02-21', '4');
+INSERT INTO attendance values ('7', '2024-02-21', '5');
+INSERT INTO attendance values ('8', '2024-02-21', '6');
+
+DELETE FROM attendance;
+DROP TABLE attendance;
+
+-- Attendance Records
+
+CREATE TABLE attendance_records(
+                                   id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                                   student_uuid VARCHAR(32) NOT NULL,
+                                   attendance_uuid VARCHAR(32) NOT NULL
+);
+
+INSERT INTO attendance_records(student_uuid, attendance_uuid) values ('1', '1');
+INSERT INTO attendance_records(student_uuid, attendance_uuid) values ('1', '6');
+INSERT INTO attendance_records(student_uuid, attendance_uuid) values ('2', '2');
+INSERT INTO attendance_records(student_uuid, attendance_uuid) values ('2', '7');
+
+DELETE FROM attendance_records;
+DROP TABLE attendance_records;

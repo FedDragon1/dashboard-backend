@@ -29,9 +29,6 @@ public class LoginController {
     private InstructorMapper instructorMapper;
 
     @Autowired
-    private HttpServletRequest request;
-
-    @Autowired
     private HttpServletResponse response;
 
     @Value("${dashboard.cookie.max-life}")
@@ -65,17 +62,10 @@ public class LoginController {
             Instructor thisInstructor;
 
             if (EntityUtil.allNull(instructor) && !cookieName.isEmpty()) {
-                System.out.println("all null");
                 thisInstructor = instructorMapper.selectInstructorAndCoursesById(cookieName);
             } else {
                 thisInstructor = instructorMapper.selectInstructorAndCoursesById(instructor.getUuid());
             }
-
-//            if (!cookieName.isEmpty()) {
-//                thisInstructor = instructorMapper.selectById(cookieName);
-//            } else {
-//                thisInstructor = instructorMapper.selectById(instructor.getUuid());
-//            }
 
             if (thisInstructor == null || (Objects.nonNull(instructor.getPassword()) &&
                     !thisInstructor.getPassword().equals(instructor.getPassword()))) {

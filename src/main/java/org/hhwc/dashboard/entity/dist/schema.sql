@@ -1,10 +1,10 @@
 -- Student
 
 CREATE TABLE student(
-                        uuid VARCHAR(32) PRIMARY KEY,
-                        name VARCHAR(32) NOT NULL,
-                        gender VARCHAR(12) NOT NULL,
-                        birthday DATE NOT NULL
+    uuid VARCHAR(32) PRIMARY KEY,
+    name VARCHAR(32) NOT NULL,
+    gender VARCHAR(12) NOT NULL,
+    birthday DATE NOT NULL
 );
 
 INSERT INTO student values ('1', '学生张三', '男', '2009-01-20');
@@ -18,9 +18,9 @@ DROP TABLE student;
 -- Instructor
 
 CREATE TABLE instructor(
-                           uuid VARCHAR(32) PRIMARY KEY,
-                           name VARCHAR(32) NOT NULL,
-                           password VARCHAR(32) NOT NULL
+    uuid VARCHAR(32) PRIMARY KEY,
+    name VARCHAR(32) NOT NULL,
+    password VARCHAR(32) NOT NULL
 );
 
 INSERT INTO instructor values ('1', '教师张三', 'zhangsan123');
@@ -34,10 +34,10 @@ DROP TABLE instructor;
 -- Courses
 
 CREATE TABLE course(
-                       uuid VARCHAR(32) PRIMARY KEY,
-                       name VARCHAR(32) NOT NULL,
-                       created DATE NOT NULL,
-                       instructor_uuid VARCHAR(32) NOT NULL
+    uuid VARCHAR(32) PRIMARY KEY,
+    name VARCHAR(32) NOT NULL,
+    created DATE NOT NULL,
+    instructor_uuid VARCHAR(32) NOT NULL
 );
 
 INSERT INTO course values ('1', '数学', '2024-02-17', '2');
@@ -53,10 +53,10 @@ DROP TABLE course;
 -- Course Members
 
 CREATE TABLE course_member(
-                              student_uuid VARCHAR(32),
-                              course_uuid VARCHAR(32),
-                              grade DOUBLE NOT NULL,
-                              PRIMARY KEY (student_uuid, course_uuid)
+    student_uuid VARCHAR(32),
+    course_uuid VARCHAR(32),
+    grade DOUBLE NOT NULL,
+    PRIMARY KEY (student_uuid, course_uuid)
 );
 
 INSERT INTO course_member values ('1', '1', 0.8);
@@ -73,8 +73,8 @@ DROP TABLE course_member;
 -- Admin
 
 CREATE TABLE admin(
-                      username VARCHAR(32) PRIMARY KEY,
-                      password VARCHAR(32)
+    username VARCHAR(32) PRIMARY KEY,
+    password VARCHAR(32)
 );
 
 INSERT INTO admin values ('admin', 'root');
@@ -85,9 +85,9 @@ DROP TABLE admin;
 -- Attendance Assignments
 
 CREATE TABLE attendance(
-                           uuid VARCHAR(32) PRIMARY KEY,
-                           date DATE NOT NULL,
-                           course_uuid VARCHAR(32) NOT NULL
+    uuid VARCHAR(32) PRIMARY KEY,
+    date DATE NOT NULL,
+    course_uuid VARCHAR(32) NOT NULL
 );
 
 INSERT INTO attendance values ('1', '2024-02-19', '1');
@@ -105,9 +105,9 @@ DROP TABLE attendance;
 -- Attendance Records
 
 CREATE TABLE attendance_records(
-                                   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                                   student_uuid VARCHAR(32) NOT NULL,
-                                   attendance_uuid VARCHAR(32) NOT NULL
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    student_uuid VARCHAR(32) NOT NULL,
+    attendance_uuid VARCHAR(32) NOT NULL
 );
 
 INSERT INTO attendance_records(student_uuid, attendance_uuid) values ('1', '1');

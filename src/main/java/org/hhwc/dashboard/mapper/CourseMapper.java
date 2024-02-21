@@ -34,5 +34,4 @@ public interface CourseMapper extends BaseMapper<Course> {
             )
     })
     List<Course> selectAll();
-
 }

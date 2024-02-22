@@ -59,6 +59,7 @@ public class LoginController {
     public Response<Instructor> login(Instructor instructor,
                                       @CookieValue(value = "Dashboard_Instructor", defaultValue = "") String cookieName) {
         return ResponseUtil.gather(() -> {
+
             Instructor thisInstructor;
 
             if (EntityUtil.allNull(instructor) && !cookieName.isEmpty()) {

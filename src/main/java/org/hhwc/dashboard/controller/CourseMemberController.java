@@ -1,7 +1,6 @@
 package org.hhwc.dashboard.controller;
 
 import org.hhwc.dashboard.entity.Course;
-import org.hhwc.dashboard.interceptor.annotations.EnsureLogin;
 import org.hhwc.dashboard.mapper.CourseMemberMapper;
 import org.hhwc.dashboard.util.Response;
 import org.hhwc.dashboard.util.ResponseUtil;

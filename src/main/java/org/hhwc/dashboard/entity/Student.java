@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 public class Student {
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId
     private String uuid;
     private String name;
     private String gender;

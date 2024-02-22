@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 public class Attendance {
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId
     private String uuid;
     private Date date;
     private String courseUuid;

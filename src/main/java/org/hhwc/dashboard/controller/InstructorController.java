@@ -8,9 +8,7 @@ import org.hhwc.dashboard.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +29,18 @@ public class InstructorController {
     @EnsureAdmin
     public Response<Integer> createNewInstructor(Instructor instructor) {
         return ResponseUtil.gather(() -> instructorMapper.insert(instructor));
+    }
+
+    @PutMapping("/instructor")
+    @EnsureAdmin
+    public Response<Integer> updateInstructor(Instructor instructor) {
+        return ResponseUtil.gather(() -> instructorMapper.updateById(instructor));
+    }
+
+    @DeleteMapping("/instructor")
+    @EnsureAdmin
+    public Response<Integer> deleteInstructor(Instructor instructor) {
+        return ResponseUtil.gather(() -> instructorMapper.deleteById(instructor));
     }
 
     @GetMapping("/instructor/simple")

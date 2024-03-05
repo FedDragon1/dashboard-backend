@@ -23,6 +23,9 @@ public interface CourseMapper extends BaseMapper<Course> {
     })
     List<Course> selectByInstructor(String instructorUuid);
 
+    @Select("select * from course where instructor_uuid = #{instructorUuid}")
+    List<Course> selectByInstructorSimple(String instructorUuid);
+
     @Select("select * from course")
     @Results({
             @Result(column = "uuid", property = "uuid"),

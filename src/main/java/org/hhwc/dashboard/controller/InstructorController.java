@@ -1,7 +1,10 @@
 package org.hhwc.dashboard.controller;
 
 import org.hhwc.dashboard.entity.Instructor;
+import org.hhwc.dashboard.entity.Student;
 import org.hhwc.dashboard.interceptor.annotations.EnsureAdmin;
+import org.hhwc.dashboard.interceptor.annotations.EnsureLogin;
+import org.hhwc.dashboard.mapper.CourseMemberMapper;
 import org.hhwc.dashboard.mapper.InstructorMapper;
 import org.hhwc.dashboard.util.Response;
 import org.hhwc.dashboard.util.ResponseUtil;
@@ -18,6 +21,9 @@ public class InstructorController {
 
     @Autowired
     private InstructorMapper instructorMapper;
+
+    @Autowired
+    private CourseMemberMapper courseMemberMapper;
 
     @GetMapping("/instructor")
     @EnsureAdmin
@@ -47,5 +53,28 @@ public class InstructorController {
     @EnsureAdmin
     public Response<List<Instructor>> getSimpleInstructors() {
         return ResponseUtil.gather(() -> instructorMapper.selectList(null));
+    }
+
+    @GetMapping("/instructor/{instructorUuid}")
+    @EnsureAdmin
+    public Response<Instructor> getInstructorById(@PathVariable String instructorUuid) {
+        return ResponseUtil.gather(() -> instructorMapper.selectById(instructorUuid));
+    }
+
+    @GetMapping("/instructor/student/{instructorUuid}")
+    @EnsureAdmin
+    public Response<List<Student>> getStudentsByInstructorUuid(@PathVariable String instructorUuid) {
+        return ResponseUtil.gather(() -> courseMemberMapper.selectStudentWithInstructor(instructorUuid));
+    }
+
+    @GetMapping("/instructor/{instructorUuid}/{selfUuid}")
+    @EnsureLogin
+    public Response<Instructor> getSelfInstructor(@PathVariable String instructorUuid, @PathVariable String selfUuid) {
+        return ResponseUtil.gather(() -> {
+            if (!instructorUuid.equals(selfUuid)) {
+                throw new RuntimeException("Unauthorized");
+            }
+            return instructorMapper.selectById(instructorUuid);
+        });
     }
 }

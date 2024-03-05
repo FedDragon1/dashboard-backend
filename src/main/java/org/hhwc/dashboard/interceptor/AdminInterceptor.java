@@ -17,9 +17,9 @@ public class AdminInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.info("Entering AdminInterceptor...");
 
-        EnsureLogin ensureAdmin;
+        EnsureAdmin ensureAdmin;
         try {
-            ensureAdmin = ((HandlerMethod) handler).getMethodAnnotation(EnsureLogin.class);
+            ensureAdmin = ((HandlerMethod) handler).getMethodAnnotation(EnsureAdmin.class);
         } catch (Exception e) {
             return true;
         }

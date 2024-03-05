@@ -54,8 +54,19 @@ public class CourseController {
     }
 
     @GetMapping("/courses/instructor/{uuid}")
-    @EnsureLogin
+    @EnsureAdmin
     public Response<List<Course>> getCoursesByInstructor(@PathVariable String uuid) {
-        return ResponseUtil.gather(() -> courseMapper.selectByInstructor(uuid));
+        return ResponseUtil.gather(() -> courseMapper.selectByInstructorSimple(uuid));
+    }
+
+    @GetMapping("/courses/instructor/{uuid}/{selfUuid}")
+    @EnsureLogin
+    public Response<List<Course>> getCoursesByInstructor(@PathVariable String uuid, @PathVariable String selfUuid) {
+        return ResponseUtil.gather(() -> {
+            if (!uuid.equals(selfUuid)) {
+                throw new RuntimeException("Unauthorized");
+            }
+            return courseMapper.selectByInstructor(uuid);
+        });
     }
 }

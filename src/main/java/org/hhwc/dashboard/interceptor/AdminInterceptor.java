@@ -4,7 +4,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hhwc.dashboard.interceptor.annotations.EnsureAdmin;
-import org.hhwc.dashboard.interceptor.annotations.EnsureLogin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;

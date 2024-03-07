@@ -34,6 +34,18 @@ public class LoginController {
     @Value("${dashboard.cookie.max-life}")
     private Integer cookieMaxLife;
 
+    @Value("${dashboard.cookie.domain}")
+    private String domain;
+
+    private Cookie getCookie(String name, String value){
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(cookieMaxLife);
+        cookie.setSecure(true);
+        cookie.setDomain(domain);
+        cookie.setPath("/");
+        return cookie;
+    }
+
     @PostMapping("/login/admin")
     public Response<String> login(Admin admin,
                                   @CookieValue(value = "Dashboard_Admin_UN", defaultValue = "") String cookieName) {
@@ -47,8 +59,7 @@ public class LoginController {
                 throw new RuntimeException("Invalid Credential");
             }
 
-            Cookie cookie = new Cookie("Dashboard_Admin_UN", thisAdmin.getUsername());
-            cookie.setMaxAge(cookieMaxLife);
+            Cookie cookie = getCookie("Dashboard_Admin_UN", thisAdmin.getUsername());
             response.addCookie(cookie);
 
             return thisAdmin.getUsername();
@@ -73,8 +84,7 @@ public class LoginController {
                 throw new RuntimeException("Invalid Credential");
             }
 
-            Cookie cookie = new Cookie("Dashboard_Instructor", thisInstructor.getUuid());
-            cookie.setMaxAge(cookieMaxLife);
+            Cookie cookie = getCookie("Dashboard_Instructor", thisInstructor.getUuid());
             response.addCookie(cookie);
 
             return thisInstructor;

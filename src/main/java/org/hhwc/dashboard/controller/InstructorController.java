@@ -61,12 +61,6 @@ public class InstructorController {
         return ResponseUtil.gather(() -> instructorMapper.selectById(instructorUuid));
     }
 
-    @GetMapping("/instructor/student/{instructorUuid}")
-    @EnsureAdmin
-    public Response<List<Student>> getStudentsByInstructorUuid(@PathVariable String instructorUuid) {
-        return ResponseUtil.gather(() -> courseMemberMapper.selectStudentWithInstructor(instructorUuid));
-    }
-
     @GetMapping("/instructor/{instructorUuid}/{selfUuid}")
     @EnsureLogin
     public Response<Instructor> getSelfInstructor(@PathVariable String instructorUuid, @PathVariable String selfUuid) {
@@ -76,5 +70,11 @@ public class InstructorController {
             }
             return instructorMapper.selectById(instructorUuid);
         });
+    }
+
+    @PutMapping("/instructor/{selfUuid}")
+    @EnsureLogin
+    public Response<Integer> updateSelfInstructor(@PathVariable String selfUuid, Instructor updateSelf) {
+        return ResponseUtil.gather(() -> instructorMapper.updateById(updateSelf));
     }
 }

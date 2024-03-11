@@ -7,9 +7,7 @@ import org.hhwc.dashboard.mapper.StudentMapper;
 import org.hhwc.dashboard.util.Response;
 import org.hhwc.dashboard.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,15 +26,40 @@ public class StudentController {
         return ResponseUtil.gather(() -> studentMapper.selectAllStudentsWithCourses());
     }
 
+    @PostMapping("/student")
+    @EnsureAdmin
+    public Response<Integer> newStudent(Student student) {
+        return ResponseUtil.gather(() -> studentMapper.insert(student));
+    }
+
+    @PutMapping("/student")
+    @EnsureAdmin
+    public Response<Integer> updateStudent(Student student) {
+        System.out.println(student);
+        return ResponseUtil.gather(() -> studentMapper.updateById(student));
+    }
+
+    @DeleteMapping("/student")
+    @EnsureAdmin
+    public Response<Integer> deleteStudent(Student student) {
+        return ResponseUtil.gather(() -> studentMapper.deleteById(student));
+    }
+
     @GetMapping("/student/course/{courseUuid}")
     @EnsureAdmin
     public Response<List<Student>> getStudentsWithCourse(@PathVariable String courseUuid) {
-        return ResponseUtil.gather(() -> courseMemberMapper.selectStudentWithInstructor(courseUuid));
+        return ResponseUtil.gather(() -> courseMemberMapper.selectStudentByCourseId(courseUuid));
     }
 
-        @GetMapping("/student/simple")
-        @EnsureAdmin
-        public Response<List<Student>> getAllStudentsSimple() {
-            return ResponseUtil.gather(() -> studentMapper.selectList(null));
-        }
+    @GetMapping("/student/instructor/{instructorUuid}")
+    @EnsureAdmin
+    public Response<List<Student>> getStudentsByInstructor(@PathVariable String instructorUuid) {
+        return ResponseUtil.gather(() -> courseMemberMapper.selectStudentWithInstructor(instructorUuid));
+    }
+
+    @GetMapping("/student/simple")
+    @EnsureAdmin
+    public Response<List<Student>> getAllStudentsSimple() {
+        return ResponseUtil.gather(() -> studentMapper.selectList(null));
+    }
 }

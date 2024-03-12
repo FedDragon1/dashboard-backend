@@ -8,7 +8,7 @@ import org.hhwc.dashboard.entity.Student;
 
 import java.util.List;
 
-public interface CourseMemberMapper extends BaseMapper<CourseMapper> {
+public interface CourseMemberMapper extends BaseMapper<CourseMember> {
     @Select("select * from course_member where course_uuid = #{courseUuid}")
     List<CourseMember> selectByCourse(String courseMember);
 
@@ -35,6 +35,27 @@ public interface CourseMemberMapper extends BaseMapper<CourseMapper> {
     List<Student> selectStudentWithInstructor(String instructorUuid);
 
     @Select("""
+           select student_uuid, uuid, grade, name
+           from course_member inner join course
+               on student_uuid = #{studentUuid} and course.uuid = course_uuid""")
+    @Results({
+            @Result(column = "student_uuid", property = "studentUuid"),
+            @Result(column = "uuid", property = "courseUuid"),
+            @Result(column = "grade", property = "grade"),
+            @Result(column = "name", property = "courseName")
+    })
+    List<CourseMember> selectMemberByStudentId(String studentUuid);
+
+    @Select("""
             """)
     List<Student> selectStudentByCourseId(String courseUuid);
+
+    @Update("""
+            update course_member set grade=#{grade}
+            where student_uuid=#{studentUuid} and course_uuid=#{courseUuid}""")
+    int updateById(Double grade, String studentUuid, String courseUuid);
+
+    @Delete("""
+            delete from course_member where student_uuid=#{studentUuid} and course_uuid=#{courseUuid}""")
+    int deleteById(String studentUuid, String courseUuid);
 }

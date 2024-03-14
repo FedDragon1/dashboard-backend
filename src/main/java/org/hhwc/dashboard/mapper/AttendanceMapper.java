@@ -28,4 +28,15 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
             )
     })
     List<Attendance> selectByCourse(String courseUuid);
+
+    @Select("select * from attendance where uuid = #{uuid}")
+    @Results({
+            @Result(column = "uuid", property = "uuid"),
+            @Result(column = "date", property = "date"),
+            @Result(column = "course_uuid", property = "courseUuid"),
+            @Result(column = "uuid", property = "records", javaType = List.class,
+                    many = @Many(select = "org.hhwc.dashboard.mapper.AttendanceRecordMapper.selectByAttendance")
+            )
+    })
+    Attendance selectById(String uuid);
 }

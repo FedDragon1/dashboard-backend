@@ -28,6 +28,30 @@ public class AttendanceController {
         return ResponseUtil.gather(() -> attendanceMapper.selectAllAttendanceWithName());
     }
 
+    @PostMapping("/attendance")
+    @EnsureAdmin
+    public Response<Integer> newAttendanceAssignment(Attendance attendance) {
+        return ResponseUtil.gather(() -> attendanceMapper.insert(attendance));
+    }
+
+    @PutMapping("/attendance")
+    @EnsureAdmin
+    public Response<Integer> updateAttendance(Attendance attendance) {
+        return ResponseUtil.gather(() -> attendanceMapper.updateById(attendance));
+    }
+
+    @DeleteMapping("/attendance")
+    @EnsureAdmin
+    public Response<Integer> deleteAttendance(Attendance attendance) {
+        return ResponseUtil.gather(() -> attendanceMapper.deleteById(attendance));
+    }
+
+    @GetMapping("/attendance/{attendanceUuid}")
+    @EnsureAdmin
+    public Response<Attendance> getAttendanceById(@PathVariable String attendanceUuid) {
+        return ResponseUtil.gather(() -> attendanceMapper.selectById(attendanceUuid));
+    }
+
     @GetMapping("/attendance/simple")
     @EnsureAdmin
     public Response<List<Attendance>> getAllAttendancesSimple() {
@@ -53,6 +77,7 @@ public class AttendanceController {
     @PostMapping("/attendance/course/{instructorUuid}")
     @EnsureLogin
     public Response<Integer> createNewAttendance(@PathVariable String instructorUuid, Attendance attendance) {
+
         return authed(() -> attendanceMapper.insert(attendance), instructorUuid, attendance.getCourseUuid());
     }
 

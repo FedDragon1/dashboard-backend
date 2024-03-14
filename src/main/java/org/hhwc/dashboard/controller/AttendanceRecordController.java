@@ -27,10 +27,34 @@ public class AttendanceRecordController {
     @Autowired
     private CourseMapper courseMapper;
 
-    @GetMapping("/attendance/record")
+    @GetMapping("/attendance-record")
     @EnsureAdmin
     public Response<List<AttendanceRecord>> getAllRecords() {
         return ResponseUtil.gather(() -> attendanceRecordMapper.selectList(null));
+    }
+
+    @PostMapping("/attendance-record")
+    @EnsureAdmin
+    public Response<Integer> newRecord(AttendanceRecord attendanceRecord) {
+        return ResponseUtil.gather(() -> attendanceRecordMapper.insert(attendanceRecord));
+    }
+
+    @PutMapping("/attendance-record")
+    @EnsureAdmin
+    public Response<Integer> updateRecord(AttendanceRecord attendanceRecord) {
+        return ResponseUtil.gather(() -> attendanceRecordMapper.updateById(attendanceRecord));
+    }
+
+    @DeleteMapping("/attendance-record")
+    @EnsureAdmin
+    public Response<Integer> deleteRecord(AttendanceRecord attendanceRecord) {
+        return ResponseUtil.gather(() -> attendanceRecordMapper.deleteById(attendanceRecord));
+    }
+
+    @GetMapping("/attendance-record/{attendanceUuid}")
+    @EnsureAdmin
+    public Response<List<AttendanceRecord>> getRecordByAttendance(@PathVariable String attendanceUuid) {
+        return ResponseUtil.gather(() -> attendanceRecordMapper.selectByAttendance(attendanceUuid));
     }
 
     private <T> Response<T> authed(Supplier<T> supplier, String instructorUuid, AttendanceRecord record) {
@@ -44,25 +68,25 @@ public class AttendanceRecordController {
         });
     }
 
-    @GetMapping("/attendance/record/{id}/{instructorUuid}")
+    @GetMapping("/attendance-record/{id}/{instructorUuid}")
     @EnsureLogin
     public Response<AttendanceRecord> getRecordById(@PathVariable Integer id, @PathVariable String instructorUuid) {
         AttendanceRecord record = attendanceRecordMapper.selectById(id);
         return authed(() -> record, instructorUuid, record);
     }
 
-    @PostMapping("/attendance/record/{instructorUuid}")
+    @PostMapping("/attendance-record/{instructorUuid}")
     @EnsureLogin
     public Response<Integer> newAttendanceEntry(@PathVariable String instructorUuid, AttendanceRecord record) {
         return authed(() -> attendanceRecordMapper.insert(record), instructorUuid, record);
     }
 
-    @PutMapping("/attendance/record/{instructorUuid}")
+    @PutMapping("/attendance-record/{instructorUuid}")
     public Response<Integer> updateAttendanceEntry(@PathVariable String instructorUuid, AttendanceRecord record) {
         return authed(() -> attendanceRecordMapper.updateById(record), instructorUuid, record);
     }
 
-    @DeleteMapping("/attendance/record/{instructorUuid}")
+    @DeleteMapping("/attendance-record/{instructorUuid}")
     public Response<Integer> deleteAttendanceEntry(@PathVariable String instructorUuid, AttendanceRecord record) {
         return authed(() -> attendanceRecordMapper.deleteById(record), instructorUuid, record);
     }

@@ -47,6 +47,12 @@ public class CourseController {
         return ResponseUtil.gather(() -> courseMapper.deleteById(course));
     }
 
+    @GetMapping("/courses/{courseUuid}")
+    @EnsureAdmin
+    public Response<Course> getCourseById(@PathVariable String courseUuid) {
+        return ResponseUtil.gather(() -> courseMapper.selectById(courseUuid));
+    }
+
     @GetMapping("/courses/simple")
     @EnsureAdmin
     public Response<List<Course>> getAllCoursesSimple() {

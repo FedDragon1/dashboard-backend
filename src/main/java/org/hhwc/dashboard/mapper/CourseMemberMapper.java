@@ -47,7 +47,9 @@ public interface CourseMemberMapper extends BaseMapper<CourseMember> {
     List<CourseMember> selectMemberByStudentId(String studentUuid);
 
     @Select("""
-            """)
+            select uuid, name, gender, birthday
+            from course_member inner join student
+            on student_uuid = uuid and course_uuid = #{courseUuid}""")
     List<Student> selectStudentByCourseId(String courseUuid);
 
     @Update("""

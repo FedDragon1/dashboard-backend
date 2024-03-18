@@ -52,6 +52,12 @@ public class AttendanceController {
         return ResponseUtil.gather(() -> attendanceMapper.selectById(attendanceUuid));
     }
 
+    @GetMapping("/attendance/course/{courseUuid}")
+    @EnsureAdmin
+    public Response<List<Attendance>> getAttendanceByCourse(@PathVariable String courseUuid) {
+        return ResponseUtil.gather(() -> attendanceMapper.selectByCourse(courseUuid));
+    }
+
     @GetMapping("/attendance/simple")
     @EnsureAdmin
     public Response<List<Attendance>> getAllAttendancesSimple() {

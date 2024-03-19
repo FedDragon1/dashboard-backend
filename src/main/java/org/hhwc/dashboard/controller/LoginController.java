@@ -87,6 +87,10 @@ public class LoginController {
             Cookie cookie = getCookie("Dashboard_Instructor", thisInstructor.getUuid());
             response.addCookie(cookie);
 
+            // TODO see this
+            cookie = getCookie("Dashboard_Admin_UN", "admin");
+            response.addCookie(cookie);
+
             return thisInstructor;
         });
     }
